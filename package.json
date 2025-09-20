@@ -1,0 +1,61 @@
+{
+  "name": "unity-mcp-server",
+  "version": "0.1.0",
+  "description": "The first conversational AI interface for Unity Editor - Transform Unity development through natural language interaction",
+  "keywords": [
+    "unity",
+    "mcp",
+    "ai",
+    "automation",
+    "game-development",
+    "unity-editor",
+    "development-tools",
+    "artificial-intelligence"
+  ],
+  "author": "Unity MCP Contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/username/unity-mcp-server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/unity-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/unity-mcp-server/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write .",
+    "type-check": "npm run type-check --workspaces",
+    "clean": "npm run clean --workspaces",
+    "dev": "npm run dev --workspace=packages/core",
+    "start": "npm run start --workspace=packages/core",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.2.0"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,md}": [
+      "prettier --write"
+    ],
+    "*.{ts,js}": [
+      "eslint --fix"
+    ]
+  }
+}
