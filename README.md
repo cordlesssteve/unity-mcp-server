@@ -185,4 +185,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 **Transform your Unity development workflow with AI assistance. The future of game development is conversational!** 🎮✨
 
-[⭐ Star this repository](https://github.com/username/unity-mcp-server) if you're excited about the future of Unity development!
+[⭐ Star this repository](https://github.com/CordlessSteve/unity-mcp-server) if you're excited about the future of Unity development!

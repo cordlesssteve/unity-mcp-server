@@ -5,19 +5,24 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Build outputs
-dist/
-build/
-*.tsbuildinfo
-
-# Environment variables
+# Environment variables and secrets
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# IDE
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
@@ -68,16 +73,75 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# Unity specific
-*.meta
+# Temporary folders
+tmp/
+temp/
 *.tmp
-Temp/
+*.temp
+
+# Unity specific files and directories
 Library/
+Temp/
+Obj/
+Build/
+Builds/
 Logs/
 UserSettings/
+*.pidb
+*.booproj
+*.svd
+*.userprefs
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
 .vsconfig
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+*.meta
+
+# Unity3D generated file on crash reports
+sysinfo.txt
+
+# Unity asset packages and media
+*.unitypackage
+*.asset
+*.prefab
+*.unity
+*.mat
+*.controller
+*.anim
+*.fbx
+*.png
+*.jpg
+*.tga
+*.gif
+*.bmp
+*.tiff
+*.psd
+*.ai
+*.mp3
+*.wav
+*.ogg
+*.mp4
+*.mov
+*.avi
+*.flv
+*.mpg
+*.mpeg
+*.asf
+*.wmv
+*.ogv
+*.3gp
+*.mkv
 
 # MCP Server specific
 mcp-logs/
-*.sqlite
-*.db
