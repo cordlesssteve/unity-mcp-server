@@ -10,19 +10,23 @@ import { EventEmitter } from 'events';
 
 import type { UnityConnection, UnityProjectInfo, UnityStatus, SceneInfo } from '../types/unity.js';
 import type { Logger } from '../utils/logger.js';
+import { UnityIPC, UnityProcessDetector } from '../unity/unity-ipc.js';
 
 /**
  * Manages Unity Editor connections and project discovery
  */
 export class UnityConnectionManager extends EventEmitter {
   private connections = new Map<string, UnityConnection>();
+  private unityIPCConnections = new Map<string, UnityIPC>();
   private activeConnection: string | undefined = undefined;
   private heartbeatInterval?: NodeJS.Timeout;
+  private processDetector: UnityProcessDetector;
   private logger: Logger;
 
   constructor(logger: Logger) {
     super();
     this.logger = logger.child('ConnectionManager');
+    this.processDetector = new UnityProcessDetector(this.logger);
   }
 
   /**
@@ -151,28 +155,48 @@ export class UnityConnectionManager extends EventEmitter {
         }
       }
 
-      // Create connection
+      // Attempt to connect to running Unity instance
+      const unityIPC = new UnityIPC(projectPath, this.logger);
+      const isUnityRunning = await unityIPC.connect();
+
+      // Create connection with real Unity state if available
+      const editorPID = isUnityRunning ? await this.getUnityPID(projectPath) : undefined;
       const connection: UnityConnection = {
         projectPath,
         unityVersion: projectInfo.unityVersion,
-        status: 'connected',
+        status: isUnityRunning ? 'connected' : 'project_only',
         lastHeartbeat: new Date(),
         targetPlatform: projectInfo.targetPlatform,
         projectName: projectInfo.projectName,
+        ...(editorPID !== undefined && { editorPID }),
       };
 
-      // TODO: Attempt to connect to running Unity instance
-      // For now, we'll establish a "mock" connection
-      // In full implementation, this would:
-      // 1. Check for running Unity instances
-      // 2. Establish IPC communication
-      // 3. Set up event streaming
+      // Set up Unity IPC event handlers if connected
+      if (isUnityRunning) {
+        this.setupUnityIPCHandlers(unityIPC, connection);
+        this.unityIPCConnections.set(projectPath, unityIPC);
+
+        // Get real Unity state
+        try {
+          const unityState = await unityIPC.getUnityState();
+          connection.isPlaying = unityState.isPlaying;
+          connection.isCompiling = unityState.isCompiling;
+        } catch (error) {
+          this.logger.warn(`Failed to get Unity state: ${error}`);
+        }
+      }
 
       this.connections.set(projectPath, connection);
       this.activeConnection = projectPath;
 
       this.emit('projectConnected', connection);
-      this.logger.info(`Successfully connected to Unity project: ${projectInfo.projectName}`);
+
+      if (isUnityRunning) {
+        this.logger.info(`Successfully connected to running Unity Editor: ${projectInfo.projectName}`);
+      } else {
+        this.logger.info(`Connected to Unity project (file-based): ${projectInfo.projectName}`);
+        this.logger.info('Unity Editor not running - file-based analysis only');
+      }
 
       return connection;
     } catch (error) {
@@ -197,6 +221,13 @@ export class UnityConnectionManager extends EventEmitter {
 
     this.logger.info(`Disconnecting from Unity project: ${targetPath}`);
 
+    // Clean up Unity IPC connection
+    const unityIPC = this.unityIPCConnections.get(targetPath);
+    if (unityIPC) {
+      unityIPC.disconnect();
+      this.unityIPCConnections.delete(targetPath);
+    }
+
     // Update connection status
     connection.status = 'disconnected';
 
@@ -213,16 +244,82 @@ export class UnityConnectionManager extends EventEmitter {
   }
 
   /**
+   * Set up Unity IPC event handlers
+   */
+  private setupUnityIPCHandlers(unityIPC: UnityIPC, connection: UnityConnection): void {
+    unityIPC.on('state_update', (state) => {
+      connection.isPlaying = state.isPlaying;
+      connection.isCompiling = state.isCompiling;
+      connection.lastHeartbeat = new Date();
+      this.emit('unityStateUpdate', { projectPath: connection.projectPath, state });
+    });
+
+    unityIPC.on('play_mode_changed', (data) => {
+      connection.isPlaying = data.isPlaying;
+      this.emit('playModeChanged', { projectPath: connection.projectPath, data });
+    });
+
+    unityIPC.on('scene_opened', (data) => {
+      this.emit('sceneOpened', { projectPath: connection.projectPath, data });
+    });
+
+    unityIPC.on('disconnected', () => {
+      connection.status = 'project_only';
+      delete connection.editorPID;
+      this.logger.warn(`Unity Editor disconnected from project: ${connection.projectName}`);
+    });
+
+    unityIPC.on('error', (error) => {
+      this.logger.error(`Unity IPC error for ${connection.projectName}: ${error.message}`);
+    });
+  }
+
+  /**
+   * Get Unity Editor PID for project
+   */
+  private async getUnityPID(projectPath: string): Promise<number | undefined> {
+    try {
+      const processes = await this.processDetector.findUnityProcesses();
+      const process = processes.find(p => p.projectPath === projectPath);
+      return process?.pid;
+    } catch (error) {
+      this.logger.debug(`Could not detect Unity PID: ${error}`);
+      return undefined;
+    }
+  }
+
+  /**
+   * Get Unity IPC connection for project
+   */
+  getUnityIPC(projectPath: string): UnityIPC | undefined {
+    return this.unityIPCConnections.get(projectPath);
+  }
+
+  /**
    * Get current Unity status
    */
   getStatus(): UnityStatus {
     const connections = Array.from(this.connections.values());
 
+    // Get real Unity state from active connection
+    let isCompiling = false;
+    let playModeState: 'Playing' | 'Stopped' | 'Paused' = 'Stopped';
+
+    if (this.activeConnection) {
+      const activeConn = this.connections.get(this.activeConnection);
+      if (activeConn) {
+        isCompiling = activeConn.isCompiling || false;
+        if (activeConn.isPlaying) {
+          playModeState = 'Playing';
+        }
+      }
+    }
+
     return {
       connections,
       activeProject: this.activeConnection,
-      isCompiling: false, // TODO: Get from Unity
-      playModeState: 'Stopped', // TODO: Get from Unity
+      isCompiling,
+      playModeState,
     };
   }
 

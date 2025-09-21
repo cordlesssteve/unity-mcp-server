@@ -7,10 +7,12 @@ export interface UnityConnection {
   projectPath: string;
   unityVersion: string;
   editorPID?: number;
-  status: 'connected' | 'disconnected' | 'error';
+  status: 'connected' | 'project_only' | 'disconnected' | 'error';
   lastHeartbeat: Date;
   targetPlatform: string;
   projectName: string;
+  isPlaying?: boolean;
+  isCompiling?: boolean;
 }
 
 /** Unity project information */
