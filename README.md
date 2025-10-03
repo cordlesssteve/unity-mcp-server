@@ -5,184 +5,157 @@
 [![Unity](https://img.shields.io/badge/Unity-2022.3+-black.svg)](https://unity.com/)
 [![MCP](https://img.shields.io/badge/MCP-Protocol-green.svg)](https://modelcontextprotocol.io/)
 
-**The first conversational AI interface for Unity Editor** - Transform Unity development through natural language interaction and intelligent automation.
+A Model Context Protocol (MCP) server for Unity Editor integration, allowing AI assistants to interact with Unity projects through natural language commands.
 
-## 🚀 **What is Unity MCP Server?**
+## What is Unity MCP Server?
 
-Unity MCP Server revolutionizes Unity development by providing an intelligent AI assistant that understands your goals, learns your patterns, and accelerates your workflow through natural language commands.
+Unity MCP Server provides an interface between AI assistants (like Claude Code) and Unity Editor, enabling automated Unity operations through conversational commands. Instead of manually executing Unity tasks, you can describe what you want to accomplish.
 
-### **Instead of this:**
-```bash
-# Complex command-line operations
-Unity.exe -batchmode -projectPath "MyProject" -executeMethod BuildScript.Build -quit
-```
+## Current Status
 
-### **Do this:**
-```
-You: "Build my project for Windows with debug symbols"
-Unity MCP: "Building Windows development build with debug symbols...
-           Build completed successfully in 2.3 minutes.
-           Output: builds/windows-dev/MyGame.exe (45.2 MB)"
-```
+**Early Development** - This is a prototype project currently in the planning and initial development phase. The core MCP server foundation is being built, with Unity integration features planned for future releases.
 
-## ✨ **Key Features**
+## Planned Features
 
-### **🗣️ Conversational Unity Development**
-- Natural language Unity operations
+### Core Integration
+- Unity project connection and communication
+- Basic asset management operations
+- Scene manipulation through MCP commands
+- Build automation for supported platforms
+
+### Development Tools
+- Script generation and modification
+- Component creation and configuration
+- Testing integration support
+- Project organization utilities
+
+### Natural Language Interface
+- Convert common Unity tasks to conversational commands
 - Context-aware command interpretation
-- Intelligent suggestion system
+- Project-specific operation suggestions
 
-### **🧠 Learning & Context Intelligence**
-- Remembers your project patterns
-- Learns from your development style
-- Cross-project knowledge sharing
+## Installation
 
-### **🔧 Comprehensive Unity Integration**
-- Asset management and optimization
-- Build automation for all platforms
-- Code generation and scaffolding
-- Testing integration and analysis
-- Performance monitoring and insights
-
-### **🔌 Extensible Plugin System**
-- Community-driven plugin ecosystem
-- Custom workflow automation
-- Third-party tool integration
-
-## 🎯 **Perfect for:**
-
-- **Solo Developers**: AI assistant for Unity best practices and productivity
-- **Development Teams**: Standardization and collaboration tools
-- **Educators**: Unity teaching and student project management
-- **Researchers**: Rapid prototyping and data collection
-
-## 🚀 **Quick Start**
-
-### **Installation**
 ```bash
 npm install -g unity-mcp-server
 ```
 
-### **Connect to Unity Project**
+### Unity Package (Planned)
+A Unity package will be available for easy integration with Unity projects once the core server is complete.
+
+## Basic Usage (Planned)
+
+### Connect to Unity Project
 ```bash
 unity-mcp connect /path/to/your/unity-project
 ```
 
-### **Start Using Natural Language**
+### Example Commands
 ```
 "List my scenes"
-"Create a new card game manager"
+"Create a new script for card management" 
 "Build for Android with release settings"
-"Run all tests and show me the results"
-"Optimize my project for mobile performance"
+"Run unit tests and show results"
 ```
 
-## 📦 **Architecture**
+## Architecture
 
 ```
 Unity MCP Server
-├── 🏗️ Core Engine (TypeScript + MCP SDK)
-├── 🔌 Plugin System (Extensible automation)
-├── 🧠 Context Manager (Learning & memory)
-└── 🎮 Unity Integration (C# package)
+├── Core Engine (TypeScript + MCP SDK)
+├── Unity Integration (C# package)  
+├── Command Parser (Natural language processing)
+└── Context Manager (Project state and learning)
 ```
 
-## 🛠️ **Development Status**
+## Development Status
 
 | Component | Status | Description |
 |-----------|--------|-------------|
-| Core Engine | 🚧 In Development | MCP server foundation |
-| Unity Integration | 📋 Planned | Unity package and bridge |
-| Asset Management | 📋 Planned | Asset operations and optimization |
-| Build Automation | 📋 Planned | Cross-platform build system |
-| Code Generation | 📋 Planned | Intelligent code scaffolding |
-| Testing Integration | 📋 Planned | Automated testing workflows |
-| Analytics & AI | 📋 Planned | Learning and suggestion system |
+| Core Engine | In Development | MCP server foundation |
+| Unity Integration | Planned | Unity package and bridge |
+| Asset Management | Planned | Asset operations and optimization |
+| Build Automation | Planned | Cross-platform build system |
+| Code Generation | Planned | Script creation and modification |
+| Testing Integration | Planned | Automated testing workflows |
 
-## 🤝 **Contributing**
+## Example Use Case
 
-We welcome contributions from the Unity community! Whether you're fixing bugs, adding features, creating plugins, or improving documentation.
+This project was inspired by development work on **Invariant**, a physics-based card game. Common tasks like creating ScriptableObjects for card data, setting up physics interactions, and managing build configurations could benefit from AI assistance.
 
-- 📖 [Contributing Guide](./CONTRIBUTING.md)
-- 🐛 [Issue Templates](./.github/ISSUE_TEMPLATE/)
-- 💬 [Discord Community](https://discord.gg/unity-mcp) (Coming Soon)
+## Why Unity MCP Server?
 
-## 📄 **Documentation**
+### Current Problems
+- Unity workflows involve many repetitive manual steps
+- Context switching between planning and implementation
+- Inconsistent project organization across team members
+- Time-consuming build and deployment processes
 
-- 📚 [API Documentation](./docs/api/)
-- 🎓 [User Guides](./docs/guides/)
-- 💡 [Examples](./examples/)
-- 🔧 [Plugin Development](./docs/guides/plugin-development.md)
+### Proposed Solutions  
+- Automate routine Unity operations through conversation
+- Maintain consistent project structure and best practices
+- Reduce time spent on boilerplate code and setup
+- Enable rapid prototyping and iteration
 
-## 🎮 **Example: Card Game Development**
+## Development Roadmap
 
-```typescript
-// Natural language Unity operations for game development
-"Create a ScriptableObject for a card game"
-→ Generates CardData class with physics properties
+### Phase 1: Foundation (Weeks 1-4)
+- [ ] Project setup and core architecture
+- [ ] Basic MCP server implementation
+- [ ] Unity project detection and connection
+- [ ] Simple command parsing
 
-"Generate a card manager with deck shuffling"
-→ Creates complete CardManager with best practices
+### Phase 2: Core Features (Weeks 5-8)
+- [ ] Asset management operations
+- [ ] Scene manipulation tools
+- [ ] Build system integration
+- [ ] Error handling and validation
 
-"Build the game for WebGL and test performance"
-→ Automated build + performance analysis
-```
+### Phase 3: Advanced Features (Weeks 9-12)
+- [ ] Code generation capabilities
+- [ ] Testing framework integration
+- [ ] Performance monitoring tools
+- [ ] Documentation and examples
 
-Perfect for projects like **Invariant** - the physics-based card game that inspired this tool!
+### Phase 4: Polish and Release (Weeks 13-16)
+- [ ] Unity Asset Store preparation
+- [ ] Community documentation
+- [ ] Performance optimization
+- [ ] Public beta release
 
-## 📊 **Why Unity MCP Server?**
+## Contributing
 
-### **🎯 Solves Real Problems**
-- **Time Savings**: 20-40% reduction in routine Unity tasks
-- **Quality Improvement**: Automated best practice enforcement
-- **Learning Acceleration**: AI-guided Unity education
-- **Team Productivity**: Standardized workflows and collaboration
+Contributions welcome! This project is in early development, so there are many opportunities to help shape the direction.
 
-### **🌟 Unique Advantages**
-- **First conversational Unity interface** in the ecosystem
-- **Open source and community-driven** development
-- **Deep Unity Editor integration** vs external tools
-- **Learning system** that adapts to your style
+- Check the [Issues](https://github.com/cordlesssteve/unity-mcp-server/issues) for tasks
+- Review the [Contributing Guide](./CONTRIBUTING.md) for development setup
+- Join discussions about features and implementation approaches
 
-## 🔮 **Roadmap**
+## Documentation
 
-### **Phase 1: Foundation** (Weeks 1-4)
-- ✅ Project setup and core architecture
-- 🚧 Unity project connection and communication
-- 📋 Basic asset management tools
-- 📋 Unity package integration
+- [API Documentation](./docs/api/) (Coming Soon)
+- [User Guides](./docs/guides/) (Coming Soon)  
+- [Examples](./examples/) (Coming Soon)
+- [Plugin Development](./docs/guides/plugin-development.md) (Coming Soon)
 
-### **Phase 2: Core Features** (Weeks 5-8)
-- 📋 Build automation system
-- 📋 Code generation framework
-- 📋 Testing integration
-- 📋 Scene management tools
+## Requirements
 
-### **Phase 3: Intelligence** (Weeks 9-12)
-- 📋 Natural language processing
-- 📋 Context management and learning
-- 📋 Intelligent suggestions
-- 📋 Analytics and insights
+- Node.js 18+ for the MCP server
+- Unity 2022.3+ for Unity integration
+- TypeScript knowledge for contributing to the server
+- C# knowledge for Unity package development
 
-### **Phase 4: Community** (Weeks 13-16)
-- 📋 Plugin ecosystem
-- 📋 Unity Asset Store release
-- 📋 Community tools and documentation
-- 📋 Public launch
+## License
 
-## 📜 **License**
+MIT License - see [LICENSE](./LICENSE) file for details.
 
-MIT License - see [LICENSE](./LICENSE) for details.
+## Acknowledgments
 
-## 🙏 **Acknowledgments**
-
-- Unity Technologies for creating an amazing game engine
-- Model Context Protocol for enabling AI tool integration
+- Unity Technologies for creating Unity Editor
+- Model Context Protocol for enabling AI tool integration  
 - The Unity developer community for inspiration and feedback
 - Invariant card game project for real-world testing scenarios
 
 ---
 
-**Transform your Unity development workflow with AI assistance. The future of game development is conversational!** 🎮✨
-
-[⭐ Star this repository](https://github.com/CordlessSteve/unity-mcp-server) if you're excited about the future of Unity development!
+**Note**: This project is in active development. Features and timelines may change based on development progress and community feedback.
